@@ -4,6 +4,9 @@
 
 This is a web browser port of Gravity Defied, written in TypeScript using Vite as the build tool. The project includes all the features of the original game and runs directly in modern web browsers.
 
+🎮 **Play online:**  
+https://yurkagon.github.io/gravity-defied-web/
+
 ![Preview](preview.gif)
 
 ## About
