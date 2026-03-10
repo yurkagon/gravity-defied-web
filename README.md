@@ -9,6 +9,15 @@ https://yurkagon.github.io/gravity-defied-web/
 
 ![Preview](preview.gif)
 
+## Controls
+
+| Key | Action |
+|----|----|
+| ↑ / ↓ | Accelerate / Brake |
+| ← / → | Lean rider backward / forward |
+| Enter | Select menu item |
+| Escape | Pause game |
+
 ## About
 
 This project is a browser-based port of the classic Gravity Defied game. It's built using:
