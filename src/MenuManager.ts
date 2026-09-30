@@ -643,7 +643,7 @@ export class MenuManager implements IMenuManager {
   }
 
   private fillCanvasWithImage(graphics: Graphics): void {
-    if (this.rasterImage === null) {
+    if (this.rasterImage === null || this.rasterImage.getWidth() === 0 || this.rasterImage.getHeight() === 0) {
       return
     }
 
