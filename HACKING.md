@@ -118,7 +118,7 @@ Nothing is written until `GD.save()`, which also reloads the page.
 | 10 | Selected level | 0 to 2 |
 | 11 | Selected track | 0 to 9 |
 | 12 | Selected league | 0 to 3 |
-| 13 | Unused | -127 |
+| 13 | Zoom, on versions that have `Options > Zoom`. Unused otherwise | 0 1x, 1 2x, 2 3x, 3 4x. -127 until it is first saved |
 | 14 | Input keyset | 0 to 2 |
 | 15 | Unused | -127 |
 | 16 to 18 | Player name | Three ASCII codes, 65 is `A` |
@@ -152,6 +152,13 @@ Open Pro up to its fifth track only:
 
 ```js
 GD.patch({ 6: 2, 9: 4 })
+GD.save()
+```
+
+Set the zoom to 2x, on versions that have `Options > Zoom`:
+
+```js
+GD.patch({ 13: 1 })
 GD.save()
 ```
 
