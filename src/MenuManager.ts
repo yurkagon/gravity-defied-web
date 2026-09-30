@@ -47,6 +47,7 @@ export class MenuManager implements IMenuManager {
   private bikeSpriteSetting: SettingsStringRender | null = null
   private inputSetting: SettingsStringRender | null = null
   private lookAheadSetting: SettingsStringRender | null = null
+  private zoomSetting: SettingsStringRender | null = null
   private clearHighscoreSetting: TimerOrMotoPartOrMenuElem | null = null
   private fullResetItem: TimerOrMotoPartOrMenuElem | null = null
   private confirmYes: SettingsStringRender | null = null
@@ -102,6 +103,7 @@ export class MenuManager implements IMenuManager {
   private isDisabledBikeSprite = 0
   private inputMode = 0
   private isDisableLookAhead = 0
+  private zoomIndex = 0
   private selectedTrackIndex = 0
   private selectedLevelIndex = 0
   private selectedLeagueIndex = 0
@@ -109,6 +111,7 @@ export class MenuManager implements IMenuManager {
   private reservedSetting15 = 0
   private toggleOptionNames: string[] = []
   private inputModeNames: string[] = []
+  private readonly zoomNames = ['1x', '2x', '3x', '4x']
   private readonly spacerTextRender: TextRender
 
   currentGameMenu: GameMenu | null = null
@@ -206,6 +209,7 @@ export class MenuManager implements IMenuManager {
         this.isDisabledBikeSprite = this.readStoredValue(3, this.isDisabledBikeSprite)
         this.inputMode = this.readStoredValue(14, this.inputMode)
         this.isDisableLookAhead = this.readStoredValue(4, this.isDisableLookAhead)
+        this.zoomIndex = this.readStoredValue(13, this.zoomIndex)
         this.selectedTrackIndex = this.readStoredValue(11, this.selectedTrackIndex)
         this.selectedLevelIndex = this.readStoredValue(10, this.selectedLevelIndex)
         this.selectedLeagueIndex = this.readStoredValue(12, this.selectedLeagueIndex)
@@ -314,6 +318,7 @@ export class MenuManager implements IMenuManager {
         this.bikeSpriteSetting = new SettingsStringRender('Bike sprite', this.isDisabledBikeSprite, this, this.toggleOptionNames, true, this.micro, this.gameMenuOptions, false)
         this.inputSetting = new SettingsStringRender('Input', this.inputMode, this, this.inputModeNames, false, this.micro, this.gameMenuOptions, false)
         this.lookAheadSetting = new SettingsStringRender('Look ahead', this.isDisableLookAhead, this, this.toggleOptionNames, true, this.micro, this.gameMenuOptions, false)
+        this.zoomSetting = new SettingsStringRender('Zoom', this.zoomIndex, this, this.zoomNames, false, this.micro, this.gameMenuOptions, false)
         this.clearHighscoreSetting = new TimerOrMotoPartOrMenuElem('Clear highscore', this.gameMenuConfirmClear, this)
         return
       case 6:
@@ -323,6 +328,7 @@ export class MenuManager implements IMenuManager {
         this.gameMenuOptions?.addMenuElement(this.bikeSpriteSetting!)
         this.gameMenuOptions?.addMenuElement(this.inputSetting!)
         this.gameMenuOptions?.addMenuElement(this.lookAheadSetting!)
+        this.gameMenuOptions?.addMenuElement(this.zoomSetting!)
         this.gameMenuOptions?.addMenuElement(this.clearHighscoreSetting!)
         this.gameMenuOptions?.addMenuElement(this.settingStringBack!)
         this.confirmNo = new SettingsStringRender('No', 0, this, [], false, this.micro, this.gameMenuMain, true)
@@ -385,6 +391,9 @@ export class MenuManager implements IMenuManager {
         this.gameMenuOptions2.addMenuElement(this.spacerTextRender)
         this.addTextRender(this.gameMenuOptions2, 'Look ahead: On/Off')
         this.addTextRender(this.gameMenuOptions2, 'Default: <On>. Turns on and off smart camera movement.')
+        this.gameMenuOptions2.addMenuElement(this.spacerTextRender)
+        this.addTextRender(this.gameMenuOptions2, 'Zoom: 1x,2x,3x,4x')
+        this.addTextRender(this.gameMenuOptions2, 'Default: <1x>. Enlarges the game graphics.')
         this.gameMenuOptions2.addMenuElement(this.spacerTextRender)
         this.addTextRender(this.gameMenuOptions2, 'Clear highscore')
         this.addTextRender(this.gameMenuOptions2, 'Lets you clear the highscores. Here you can also do a "Full Reset" which will reset the game to original state (clear settings, highscores, unlocked levels and leagues).')
@@ -805,6 +814,7 @@ export class MenuManager implements IMenuManager {
     this.setValue(3, this.bikeSpriteSetting?.getCurrentOptionPos() ?? 0)
     this.setValue(14, this.inputSetting?.getCurrentOptionPos() ?? 0)
     this.setValue(4, this.lookAheadSetting?.getCurrentOptionPos() ?? 0)
+    this.setValue(13, this.zoomSetting?.getCurrentOptionPos() ?? 0)
     this.setValue(5, this.settingsStringLeague?.getMaxAvailableOptionPos() ?? 0)
     this.setValue(6, this.settingStringLevel?.getMaxAvailableOptionPos() ?? 0)
     this.setValue(10, this.settingStringLevel?.getCurrentOptionPos() ?? 0)
@@ -897,6 +907,13 @@ export class MenuManager implements IMenuManager {
 
     if (menuElement === this.lookAheadSetting) {
       this.micro.gamePhysics?.setEnableLookAhead(this.lookAheadSetting.getCurrentOptionPos() === 0)
+      return
+    }
+
+    if (menuElement === this.zoomSetting) {
+      if (this.zoomSetting.consumeSelectionMenuRequested()) {
+        this.zoomSetting.setCurrentOptionPos(this.zoomSetting.getCurrentOptionPos() + 1)
+      }
       return
     }
 
@@ -1063,6 +1080,10 @@ export class MenuManager implements IMenuManager {
     return this.settingsStringLeague?.getCurrentOptionPos() ?? 0
   }
 
+  getZoom(): number {
+    return (this.zoomSetting?.getCurrentOptionPos() ?? 0) + 1
+  }
+
   setFinishTime(var1: number): void {
     this.lastFinishTime = var1
   }
@@ -1128,6 +1149,7 @@ export class MenuManager implements IMenuManager {
     this.driverSpriteSetting?.setCurrentOptionPos(0)
     this.bikeSpriteSetting?.setCurrentOptionPos(0)
     this.lookAheadSetting?.setCurrentOptionPos(0)
+    this.zoomSetting?.setCurrentOptionPos(0)
     this.settingsStringLeague?.setCurrentOptionPos(0)
     this.settingsStringLeague?.setAvailableOptions(0)
     this.settingStringLevel?.setCurrentOptionPos(0)

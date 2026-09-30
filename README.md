@@ -28,6 +28,10 @@ This project is a browser-based port of the classic Gravity Defied game. It's bu
 
 The project is based on the C++ & SDL2 port: [gravity_defied_cpp](https://github.com/rgimad/gravity_defied_cpp)
 
+## Display
+
+On a large screen the bike and the track can look small. `Options > Zoom` enlarges the game graphics from 1x to 4x. The choice is saved with the other options.
+
 ## Disclaimer
 
 **This Project is not associated with Codebrew Software in any fashion. All rights to the original Gravity Defied, it's name, logotype, brand and all that stuff belong to Codebrew Software.**

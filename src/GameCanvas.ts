@@ -64,6 +64,7 @@ export class GameCanvas {
   private isMenuButtonVisible = false
   private isBackButtonVisible = false
   private repaintHandler: (() => void) | null = null
+  private zoom = 1
   private static stringWithTime = ''
   private readonly time10MsToStringCache = new Array<string>(100).fill('')
   private timeInSeconds = -1
@@ -155,12 +156,17 @@ export class GameCanvas {
     GameCanvas.defaultFontWidth00 = 25
   }
 
-  resize(width: number, height: number): void {
+  resize(width: number, height: number, zoom: number): void {
     this.canvas.width = width
     this.canvas.height = height
-    this.width = width
-    this.height = height
-    this.height2 = height
+    this.zoom = zoom
+    this.width = Math.ceil(width / zoom)
+    this.height = Math.ceil(height / zoom)
+    this.height2 = this.height
+  }
+
+  getZoom(): number {
+    return this.zoom
   }
 
   getWidth(): number {
@@ -182,6 +188,8 @@ export class GameCanvas {
     void this.loadingScreenMode
     this.ctx.setTransform(1, 0, 0, 1, 0, 0)
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    this.ctx.setTransform(this.zoom, 0, 0, this.zoom, 0, 0)
+    this.ctx.imageSmoothingEnabled = false
     this.processTimers()
   }
 

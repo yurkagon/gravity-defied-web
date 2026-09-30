@@ -69,8 +69,8 @@ export async function startGravityDefiedApp(root: HTMLDivElement): Promise<void>
       height = Math.max(height, Math.floor(window.visualViewport.height))
     }
 
-    gameCanvas.resize(width, height)
-    gamePhysics.setMinimalScreenWH(width < height ? width : height)
+    gameCanvas.resize(width, height, menuManager.getZoom())
+    gamePhysics.setMinimalScreenWH(Math.min(gameCanvas.getWidth(), gameCanvas.getHeight()))
   }
 
   function render(): void {
@@ -238,6 +238,10 @@ export async function startGravityDefiedApp(root: HTMLDivElement): Promise<void>
   menuManager.showMenuScreen(0)
 
   function loop(now: number): void {
+    if (menuManager.getZoom() !== gameCanvas.getZoom()) {
+      resize()
+    }
+
     if (Micro.isInGameMenu && !state.wasInGameMenu) {
       state.lastMenuStepMs = now
     }
