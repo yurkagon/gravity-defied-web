@@ -97,6 +97,10 @@ gravity-defied-web/
 
 `gravity-defied` `game` `mototrial` `racing` `browser-game` `typescript` `vite` `canvas` `web-game` `retro-game` `j2me-port`
 
+## Cheats and modding
+
+The built-in cheat name, save editing and modding notes are in [HACKING.md](HACKING.md).
+
 ## License
 
 This project is licensed under the GNU General Public License v2.0 (GPL-2.0). See [LICENSE.md](LICENSE.md) for the full license text.
