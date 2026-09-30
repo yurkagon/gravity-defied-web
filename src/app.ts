@@ -336,6 +336,10 @@ export async function startGravityDefiedApp(root: HTMLDivElement): Promise<void>
     }
   })
 
+  window.addEventListener('pagehide', () => {
+    menuManager.persistState()
+  })
+
   requestAnimationFrame(loop)
 }
 

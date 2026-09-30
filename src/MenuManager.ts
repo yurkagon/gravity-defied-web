@@ -463,7 +463,7 @@ export class MenuManager implements IMenuManager {
     }
 
     this.recordManager.closeRecordStore()
-    let availableLeagues = -1
+    let unlockedLeague = -1
     if (this.settingsStringTrack.getMaxAvailableOptionPos() >= this.settingsStringTrack.getCurrentOptionPos()) {
       this.settingsStringTrack.setAvailableOptions(
         this.settingsStringTrack.getCurrentOptionPos() + 1 < this.unlockedTracksByLevel[this.settingStringLevel.getCurrentOptionPos()]
@@ -480,23 +480,23 @@ export class MenuManager implements IMenuManager {
       this.completedLastTrack = true
       switch (this.settingStringLevel.getCurrentOptionPos()) {
         case 0:
-          if (availableLeagues < 1) {
-            availableLeagues = 1
-            this.settingsStringLeague.setAvailableOptions(availableLeagues)
+          if (this.settingsStringLeague.getMaxAvailableOptionPos() < 1) {
+            unlockedLeague = 1
+            this.settingsStringLeague.setAvailableOptions(unlockedLeague)
           }
           break
         case 1:
-          if (availableLeagues < 2) {
-            availableLeagues = 2
-            this.settingsStringLeague.setAvailableOptions(availableLeagues)
+          if (this.settingsStringLeague.getMaxAvailableOptionPos() < 2) {
+            unlockedLeague = 2
+            this.settingsStringLeague.setAvailableOptions(unlockedLeague)
           }
           break
         case 2:
-          if (availableLeagues < 3) {
-            availableLeagues = 3
+          if (this.settingsStringLeague.getMaxAvailableOptionPos() < 3) {
+            unlockedLeague = 3
             this.settingsStringLeague.setOptionsList(this.leagueNamesAll4)
             this.leagueNames = this.leagueNamesAll4
-            this.settingsStringLeague.setAvailableOptions(availableLeagues)
+            this.settingsStringLeague.setAvailableOptions(unlockedLeague)
           }
       }
 
@@ -521,13 +521,13 @@ export class MenuManager implements IMenuManager {
         this.settingsStringTrack.setAvailableOptions(this.unlockedTracksByLevel[this.settingStringLevel.getCurrentOptionPos()])
       }
 
-      if (availableLeagues !== -1) {
-        this.addTextRender(this.gameMenuFinished, `Congratultions! You have successfully unlocked a new league: ${this.leagueNames[availableLeagues]}`)
-        if (availableLeagues === 3) {
+      if (unlockedLeague !== -1) {
+        this.addTextRender(this.gameMenuFinished, `Congratultions! You have successfully unlocked a new league: ${this.leagueNames[unlockedLeague]}`)
+        if (unlockedLeague === 3) {
           this.gameMenuFinished.addMenuElement(new TextRender('Enjoy...', this.micro))
         }
 
-        this.showAlert('League unlocked', `You have successfully unlocked a new league: ${this.leagueNames[availableLeagues]}`, null)
+        this.showAlert('League unlocked', `You have successfully unlocked a new league: ${this.leagueNames[unlockedLeague]}`, null)
       } else {
         let var4 = true
         if (this.micro.levelLoader !== null) {
@@ -552,6 +552,7 @@ export class MenuManager implements IMenuManager {
     this.gameMenuFinished.addMenuElement(this.restartTrackAction)
     this.gameMenuFinished.addMenuElement(this.settingStringPlayMenu)
     this.openMenu(this.gameMenuFinished, false)
+    this.persistState()
   }
 
   repaint(): void {
