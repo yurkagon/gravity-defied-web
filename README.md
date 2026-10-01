@@ -104,3 +104,9 @@ This project is licensed under the GNU General Public License v2.0 (GPL-2.0). Se
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## Contributors
+
+<a href="https://github.com/yurkagon/gravity-defied-web/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=yurkagon/gravity-defied-web" alt="Contributors to Gravity Defied Web" />
+</a>
