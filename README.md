@@ -18,6 +18,10 @@ https://yurkagon.github.io/gravity-defied-web/
 | Enter | Select menu item |
 | Escape | Pause game |
 
+## Progress
+
+Unlocked tracks and leagues, options and best times are stored in your browser (`localStorage`). The game saves them every time a track is finished and when the page is closed. Clearing the site data resets the game.
+
 ## About
 
 This project is a browser-based port of the classic Gravity Defied game. It's built using:
