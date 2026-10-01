@@ -3,6 +3,7 @@ import { GamePhysics } from './GamePhysics.ts'
 import { LevelLoader } from './LevelLoader.ts'
 import { MenuManager } from './MenuManager.ts'
 import { Micro } from './Micro.ts'
+import { TouchControls } from './TouchControls.ts'
 import LEVELS_MRG_URL from './assets/levels.mrg?url'
 
 type AppState = {
@@ -54,6 +55,18 @@ export async function startGravityDefiedApp(root: HTMLDivElement): Promise<void>
   menuManager.applyLoadedSpriteFlags(state.loadedSpriteFlags)
   gamePhysics.setMode(1)
 
+  const touchControls = new TouchControls(root, {
+    keyPressed: (keyCode) => {
+      gameCanvas.keyPressed(keyCode)
+      render()
+    },
+    keyReleased: (keyCode) => gameCanvas.keyReleased(keyCode),
+    back: () => {
+      handleBack()
+      render()
+    },
+  })
+
   function resize(): void {
     const rect = root.getBoundingClientRect()
     let width = Math.floor(rect.width)
@@ -75,6 +88,30 @@ export async function startGravityDefiedApp(root: HTMLDivElement): Promise<void>
 
   function render(): void {
     gameCanvas.paint(gameCanvas.getGraphics())
+    touchControls.update(Micro.isInGameMenu, isBackAvailable())
+  }
+
+  function isBackAvailable(): boolean {
+    if (Micro.isInGameMenu) {
+      const menu = menuManager.getCurrentMenu()
+      return menu !== null && menu.getParentMenu() !== null
+    }
+
+    return gameCanvas.hasMenuButton()
+  }
+
+  function handleBack(): boolean {
+    if (Micro.isInGameMenu) {
+      gameCanvas.handleBackAction()
+      return true
+    }
+
+    if (gameCanvas.hasMenuButton()) {
+      gameCanvas.openPauseMenu()
+      return true
+    }
+
+    return false
   }
 
   gameCanvas.setRepaintHandler(render)
@@ -312,13 +349,7 @@ export async function startGravityDefiedApp(root: HTMLDivElement): Promise<void>
     const keyCode = browserKeyCodeToGameKeyCode(event.code)
 
     if (event.code === 'Escape') {
-      if (Micro.isInGameMenu) {
-        gameCanvas.handleBackAction()
-        handled = true
-      } else if (gameCanvas.hasMenuButton()) {
-        gameCanvas.openPauseMenu()
-        handled = true
-      }
+      handled = handleBack()
     }
 
     if (keyCode !== null) {

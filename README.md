@@ -11,6 +11,10 @@ https://yurkagon.github.io/gravity-defied-web/
 
 ## Controls
 
+On a phone or tablet the game shows on-screen buttons: the arrows ride the bike and move through the menus, `OK` selects, and `Menu` / `Back` pauses or goes back.
+
+With a keyboard:
+
 | Key | Action |
 |----|----|
 | ↑ / ↓ | Accelerate / Brake |
